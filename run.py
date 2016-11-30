@@ -1,9 +1,13 @@
+from repl.interpreter import Interpreter
+
 
 def main():
     # simple REPL
+    interpreter = Interpreter()
     while True:
         try:
-            res = input('> ')
+            line = input('> ')
+            res = interpreter.run(line)
             print(res)
         except KeyboardInterrupt:
             print("")
