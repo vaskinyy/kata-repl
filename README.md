@@ -10,5 +10,5 @@ pip install -r requirements
 ```
 2. Run the REPL
 ```
-python repl.py
+python run.py
 ```
