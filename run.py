@@ -5,7 +5,7 @@ def main():
         try:
             res = input('> ')
             print(res)
-        except KeyboardInterrupt as ex:
+        except KeyboardInterrupt:
             print("")
             print("Bye")
             break

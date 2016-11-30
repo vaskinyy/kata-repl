@@ -3,12 +3,12 @@ Codewars Kata: Simple Interactive Interpreter
 
 
 ## How to run
-0. Create a virtual environment
-1. Install requirement
+1. (Optional) Create a virtual environment
+2. Install requirement
 ```
 pip install -r requirements
 ```
-2. Run the REPL
+3. Run the REPL
 ```
 python run.py
 ```
