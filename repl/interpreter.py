@@ -1,4 +1,5 @@
-from repl.lexer import Lexer, Token, EOF, DIGIT, PLUS, MINUS
+from repl.lexer import Lexer, Token
+from repl.lexems import EOF, PLUS, MINUS, DIGIT, DIGIT, PLUS, MINUS
 
 
 class Interpreter(object):

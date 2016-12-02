@@ -6,7 +6,7 @@ Codewars Kata: Simple Interactive Interpreter
 - (Optional) Create a virtual environment
 - Install requirement
 ```
-pip install -r requirements
+pip install -r requirements.txt
 ```
 - Run the REPL
 ```
