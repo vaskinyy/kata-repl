@@ -26,9 +26,6 @@ class Lexer(object):
     def current(self):
         return self.get_char(position=self.position)
 
-    def lookup(self):
-        return self.get_char(position=self.position + 1)
-
     def next(self):
         val = self.current()
         self.position += 1
@@ -97,4 +94,3 @@ class Lexer(object):
             return Token(lexems.LETTER, text)
 
         return None
-

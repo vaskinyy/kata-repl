@@ -2,7 +2,7 @@ from repl.lexems import EOF, DIGIT, PLUS, MINUS
 from repl.lexer import Lexer, Token
 
 
-class Interpreter(object):
+class Parser(object):
     def __init__(self):
         self.lexer = Lexer()
         self.tokens = []
@@ -32,6 +32,14 @@ class Interpreter(object):
         if position >= len(self.tokens):
             return Token(EOF, '')
         return self.tokens[position]
+
+    # expression::= factor | expression operator expression
+    # factor::= number | identifier | assignment | '('expression')' | function - call
+    #
+    # operator::= '+' | '-' | '*' | '/' | '%'
+    #
+    # letter::= 'a' | 'b' | ... | 'y' | 'z' | 'A' | 'B' | ... | 'Y' | 'Z'
+    # digit::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
 
     def expr(self):
         first = self.next()
