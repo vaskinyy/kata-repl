@@ -1,5 +1,6 @@
-from repl.lexems import EOF, DIGIT, PLUS, MINUS
+from repl.lexems import EOF, DIGIT, PLUS, MINUS, LETTER, OPEN_BRACKET, OPERATIONS
 from repl.lexer import Lexer, Token
+from repl.op import LiteralNode, BinaryNode
 
 
 class Parser(object):
@@ -41,17 +42,32 @@ class Parser(object):
     # letter::= 'a' | 'b' | ... | 'y' | 'z' | 'A' | 'B' | ... | 'Y' | 'Z'
     # digit::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
 
+    def factor(self):
+        token = self.next()
+        if token.type == OPEN_BRACKET:
+            res = self.expr()
+            self.next()
+            return res
+        return LiteralNode(token)
+
     def expr(self):
-        first = self.next()
-        second = self.next()
-        third = self.next()
-        if first.type == DIGIT and second.type == MINUS and third.type == DIGIT:
-            return first.value - third.value
+        left = self.factor()
+        op_token = self.next()
+        if op_token.type in OPERATIONS:
+            right = self.factor()
+            return BinaryNode(left, op_token, right)
+        return LiteralNode(left)
 
-        if first.type == DIGIT and second.type == PLUS and third.type == DIGIT:
-            return first.value + third.value
-
-        if first.type == DIGIT:
-            return first.value
-
-        return ""
+        # first = self.next()
+        # second = self.next()
+        # third = self.next()
+        # if first.type == DIGIT and second.type == MINUS and third.type == DIGIT:
+        #     return first.value - third.value
+        #
+        # if first.type == DIGIT and second.type == PLUS and third.type == DIGIT:
+        #     return first.value + third.value
+        #
+        # if first.type == DIGIT:
+        #     return first.value
+        #
+        # return ""
