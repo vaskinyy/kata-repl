@@ -1,4 +1,4 @@
-from repl.lexems import EOF, DIGIT, PLUS, MINUS, LETTER, OPEN_BRACKET, OPERATIONS
+from repl import lexems
 from repl.lexer import Lexer, Token
 from repl.op import LiteralNode, BinaryNode
 
@@ -31,7 +31,7 @@ class Parser(object):
 
     def get_token(self, position):
         if position >= len(self.tokens):
-            return Token(EOF, '')
+            return Token(lexems.EOF, '')
         return self.tokens[position]
 
     # expression::= factor | expression operator expression
@@ -43,31 +43,27 @@ class Parser(object):
     # digit::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
 
     def factor(self):
-        token = self.next()
-        if token.type == OPEN_BRACKET:
+        token = self.current()
+        if token.type == lexems.OPEN_BRACKET:
+            self.next()
             res = self.expr()
             self.next()
             return res
+        self.next()
         return LiteralNode(token)
 
-    def expr(self):
-        left = self.factor()
-        op_token = self.next()
-        if op_token.type in OPERATIONS:
+    def term(self):
+        node = self.factor()
+        while self.current().type in [lexems.MULTIPLY, lexems.PERCENT, lexems.DIVIDE]:
+            op_token = self.next()
             right = self.factor()
-            return BinaryNode(left, op_token, right)
-        return LiteralNode(left)
+            node = BinaryNode(node, op_token, right)
+        return node
 
-        # first = self.next()
-        # second = self.next()
-        # third = self.next()
-        # if first.type == DIGIT and second.type == MINUS and third.type == DIGIT:
-        #     return first.value - third.value
-        #
-        # if first.type == DIGIT and second.type == PLUS and third.type == DIGIT:
-        #     return first.value + third.value
-        #
-        # if first.type == DIGIT:
-        #     return first.value
-        #
-        # return ""
+    def expr(self):
+        node = self.term()
+        while self.current().type in [lexems.PLUS, lexems.MINUS]:
+            op_token = self.next()
+            right = self.term()
+            node = BinaryNode(node, op_token, right)
+        return node

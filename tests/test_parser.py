@@ -13,11 +13,8 @@ class Test_Parser(unittest.TestCase):
         self.assertEqual(tree.left.val, Token(lexems.DIGIT, 1))
         self.assertEqual(tree.right.val, Token(lexems.DIGIT, 7))
 
-    def test_multipl(self):
+    def test_multiply(self):
         parser = Parser()
         tree = parser.run("1 + 7 * 5")
-        print(tree)
         self.assertEqual(tree.op, Token(lexems.PLUS, lexems.PLUS))
-        self.assertEqual(tree.left.val, Token(lexems.DIGIT, 1))
-        self.assertEqual(tree.right.val, Token(lexems.DIGIT, 7))
-
+        self.assertEqual(tree.left.val, Token(lexems.DIGIT, 1.0))
