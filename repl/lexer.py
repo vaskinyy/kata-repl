@@ -1,6 +1,6 @@
 import re
 
-from repl import lexems
+from repl.lexems import *
 
 DIGIT_RE = re.compile('\d+(\.\d+)?')
 LETTER_RE = re.compile('(\_\w+)?')
@@ -46,9 +46,9 @@ class Lexer(object):
             current = self.next()
 
             if current.isdigit() \
-                    or current == lexems.DOT \
+                    or current == DOT \
                     or current.isalpha() \
-                    or current == lexems.UNDERSCORE \
+                    or current == UNDERSCORE \
                     or current.isdigit():
                 current_text += current
                 continue
@@ -57,20 +57,20 @@ class Lexer(object):
             if current.isspace():
                 continue
 
-            if current in lexems.ASSIGNMENT:
-                if current + self.current() == lexems.FN_OPERATOR:
+            if current in ASSIGNMENT:
+                if current + self.current() == FN_OPERATOR:
                     _ = self.next()
-                    tokens.append(Token(lexems.FN_OPERATOR, lexems.FN_OPERATOR))
+                    tokens.append(Token(FN_OPERATOR, FN_OPERATOR))
                     continue
-                tokens.append(Token(lexems.ASSIGNMENT, lexems.ASSIGNMENT))
+                tokens.append(Token(ASSIGNMENT, ASSIGNMENT))
                 continue
 
-            if current in lexems.OPERATIONS:
+            if current in OPERATIONS:
                 tokens.append(Token(current, current))
                 continue
 
         self.add_token(current_text, tokens)
-        tokens.append(Token(lexems.EOF, lexems.EOF))
+        tokens.append(Token(EOF, ""))
         return tokens
 
     def add_token(self, current_text, tokens):
@@ -85,12 +85,12 @@ class Lexer(object):
             return None
 
         if DIGIT_RE.match(text):
-            return Token(lexems.DIGIT, float(text))
+            return Token(DIGIT, float(text))
 
-        if text == lexems.FN_KEYWORD:
-            return Token(lexems.FN_KEYWORD, text)
+        if text == FN_KEYWORD:
+            return Token(FN_KEYWORD, text)
 
         if LETTER_RE.match(text):
-            return Token(lexems.LETTER, text)
+            return Token(LETTER, text)
 
         return None

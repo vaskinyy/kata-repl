@@ -7,7 +7,7 @@ def main():
     while True:
         try:
             line = input('> ')
-            res = interpreter.run(line)
+            res = interpreter.input(line)
             print(res)
         except KeyboardInterrupt:
             print("")

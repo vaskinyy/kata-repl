@@ -1,4 +1,4 @@
-from repl import lexems
+from repl.lexems import *
 from repl.lexer import Lexer, Token
 from repl.op import LiteralNode, BinaryNode, VariableDefinitionNode
 
@@ -12,7 +12,10 @@ class Parser(object):
     def run(self, line):
         self.clear()
         self.tokens = self.lexer.parse(line)
-        return self.expr()
+        res = self.expr()
+        if self.next() != Token(EOF, ""):
+            raise(Exception("Error: Invalid input"))
+        return res
 
     def clear(self):
         self.tokens.clear()
@@ -31,23 +34,23 @@ class Parser(object):
 
     def get_token(self, position):
         if position >= len(self.tokens):
-            return Token(lexems.EOF, '')
+            return Token(EOF, "")
         return self.tokens[position]
 
     def factor(self):
         token = self.next()
 
         node = LiteralNode(token)
-        if token.type == lexems.MINUS and self.current().type == lexems.DIGIT:
+        if token.type == MINUS and self.current().type == DIGIT:
             token = self.next()
             token.value = -token.value
             node = LiteralNode(token)
-        elif token.type == lexems.LETTER and self.current().type == lexems.ASSIGNMENT:
+        elif token.type == LETTER and self.current().type == ASSIGNMENT:
             node = VariableDefinitionNode(token)
             op_token = self.next()
             right = self.expr()
             node = BinaryNode(node, op_token, right)
-        elif token.type == lexems.OPEN_BRACKET:
+        elif token.type == OPEN_BRACKET:
             res = self.expr()
             self.next()
             return res
@@ -56,7 +59,7 @@ class Parser(object):
 
     def term(self):
         node = self.factor()
-        while self.current().type in [lexems.MULTIPLY, lexems.PERCENT, lexems.DIVIDE]:
+        while self.current().type in [MULTIPLY, PERCENT, DIVIDE]:
             op_token = self.next()
             right = self.factor()
             node = BinaryNode(node, op_token, right)
@@ -64,7 +67,7 @@ class Parser(object):
 
     def expr(self):
         node = self.term()
-        while self.current().type in [lexems.PLUS, lexems.MINUS]:
+        while self.current().type in [PLUS, MINUS]:
             op_token = self.next()
             right = self.term()
             node = BinaryNode(node, op_token, right)

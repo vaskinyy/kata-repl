@@ -13,7 +13,7 @@ class Test_Lexer(unittest.TestCase):
         result = [Token(lexems.LETTER, 'x'),
                   Token(lexems.ASSIGNMENT, lexems.ASSIGNMENT),
                   Token(lexems.DIGIT, 7.0),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_operation(self):
@@ -21,7 +21,7 @@ class Test_Lexer(unittest.TestCase):
         result = [Token(lexems.LETTER, 'x'),
                   Token(lexems.PLUS, lexems.PLUS),
                   Token(lexems.DIGIT, 6.0),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_assignment_chain(self):
@@ -31,7 +31,7 @@ class Test_Lexer(unittest.TestCase):
                   Token(lexems.LETTER, 'y'),
                   Token(lexems.ASSIGNMENT, lexems.ASSIGNMENT),
                   Token(lexems.DIGIT, 7.0),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_assignment_chain_hard(self):
@@ -45,7 +45,7 @@ class Test_Lexer(unittest.TestCase):
                   Token(lexems.ASSIGNMENT, lexems.ASSIGNMENT),
                   Token(lexems.DIGIT, 3.0),
                   Token(lexems.CLOSE_BRACKET, lexems.CLOSE_BRACKET),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_fn_definition(self):
@@ -60,7 +60,7 @@ class Test_Lexer(unittest.TestCase):
                   Token(lexems.CLOSE_BRACKET, lexems.CLOSE_BRACKET),
                   Token(lexems.DIVIDE, lexems.DIVIDE),
                   Token(lexems.DIGIT, 2.0),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_fn_definition_error(self):
@@ -73,7 +73,7 @@ class Test_Lexer(unittest.TestCase):
                   Token(lexems.LETTER, 'x'),
                   Token(lexems.PLUS, lexems.PLUS),
                   Token(lexems.LETTER, 'z'),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_fn_definition_echo(self):
@@ -83,7 +83,7 @@ class Test_Lexer(unittest.TestCase):
                   Token(lexems.LETTER, 'x'),
                   Token(lexems.FN_OPERATOR, lexems.FN_OPERATOR),
                   Token(lexems.LETTER, 'x'),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_fn_definition_add(self):
@@ -96,7 +96,7 @@ class Test_Lexer(unittest.TestCase):
                   Token(lexems.LETTER, 'x'),
                   Token(lexems.PLUS, lexems.PLUS),
                   Token(lexems.LETTER, 'y'),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_fn_definition_inc(self):
@@ -108,7 +108,7 @@ class Test_Lexer(unittest.TestCase):
                   Token(lexems.LETTER, 'x'),
                   Token(lexems.PLUS, lexems.PLUS),
                   Token(lexems.DIGIT, 1.0),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)
 
     def test_example_fn_call_inc(self):
@@ -117,5 +117,5 @@ class Test_Lexer(unittest.TestCase):
                   Token(lexems.ASSIGNMENT, lexems.ASSIGNMENT),
                   Token(lexems.LETTER, 'inc'),
                   Token(lexems.LETTER, 'a'),
-                  Token(lexems.EOF, lexems.EOF)]
+                  Token(lexems.EOF, "")]
         self.assertEqual(tokens, result)

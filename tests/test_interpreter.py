@@ -4,62 +4,72 @@ from repl.interpreter import Interpreter
 
 
 class Test_Interpreter(unittest.TestCase):
+    def test_empty(self):
+        interpreter = Interpreter()
+        res = interpreter.input("")
+        self.assertEqual("", res)
+
+    def test_invalid_input(self):
+        interpreter = Interpreter()
+        with self.assertRaises(Exception) as context:
+            res = interpreter.input("1 2")
+
     def test_adding(self):
         interpreter = Interpreter()
-        res = interpreter.run("1 + 7")
+        res = interpreter.input("1 + 7")
         self.assertEqual(res, 8.0)
 
     def test_multiply(self):
         interpreter = Interpreter()
-        res = interpreter.run("1 + 7 * 5")
+        res = interpreter.input("1 + 7 * 5")
         self.assertEqual(res, 36.0)
 
     def test_multiply_2(self):
         interpreter = Interpreter()
-        res = interpreter.run("7 * 5 + 1")
+        res = interpreter.input("7 * 5 + 1")
         self.assertEqual(res, 36.0)
 
     def test_brackets(self):
         interpreter = Interpreter()
-        res = interpreter.run("7 * (5 + 1)")
+        res = interpreter.input("7 * (5 + 1)")
         self.assertEqual(res, 42.0)
 
     def test_brackets_2(self):
         interpreter = Interpreter()
-        res = interpreter.run("((7 * 5) + 1)")
+        res = interpreter.input("((7 * 5) + 1)")
         self.assertEqual(res, 36.0)
 
     def test_add_mul_div(self):
         interpreter = Interpreter()
-        res = interpreter.run("1+2*3+4/2")
+        res = interpreter.input("1+2*3+4/2")
         self.assertEqual(res, 9.0)
 
     def test_per_cent(self):
         interpreter = Interpreter()
-        res = interpreter.run("1+3%2")
+        res = interpreter.input("1+3%2")
         self.assertEqual(res, 2.0)
 
     def test_assignment(self):
         interpreter = Interpreter()
-        res = interpreter.run("x = 4")
+        res = interpreter.input("x = 4")
         self.assertEqual(res, 4.0)
-        res1 = interpreter.run("x")
+        res1 = interpreter.input("x")
         self.assertEqual(res1, 4.0)
 
     def test_assignment_complex(self):
         interpreter = Interpreter()
-        res = interpreter.run("x = y = 4")
+        res = interpreter.input("x = y = 4")
         self.assertEqual(res, 4.0)
-        res1 = interpreter.run("x")
+        res1 = interpreter.input("x")
         self.assertEqual(res1, 4.0)
-        res2 = interpreter.run("y")
+        res2 = interpreter.input("y")
         self.assertEqual(res2, 4.0)
 
     def test_assignemnt_plus(self):
         interpreter = Interpreter()
-        res = interpreter.run("x = 5+4")
+        res = interpreter.input("x = 5+4")
         self.assertEqual(res, 9.0)
-        res1 = interpreter.run("x * 10")
+        res1 = interpreter.input("x * 10")
         self.assertEqual(res1, 90.0)
 
     def test_arithmetics(self):
@@ -77,5 +87,5 @@ class Test_Interpreter(unittest.TestCase):
         interpreter = Interpreter()
 
         for d in data:
-            res = interpreter.run(d[0])
+            res = interpreter.input(d[0])
             self.assertEqual(res, d[1])
