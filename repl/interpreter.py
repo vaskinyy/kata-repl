@@ -1,49 +1,29 @@
-from repl.lexems import EOF, DIGIT, PLUS, MINUS
-from repl.lexer import Lexer, Token
+from repl import lexems
+from repl.parser import Parser
+from repl.visitor import NodeVisitor
 
 
-class Interpreter(object):
+class Interpreter(NodeVisitor):
     def __init__(self):
-        self.lexer = Lexer()
-        self.tokens = []
-        self.position = 0
+        self.parser = Parser()
 
     def run(self, line):
-        self.clear()
-        self.tokens = self.lexer.parse(line)
-        return self.expr()
+        self.parser.clear()
+        tree = self.parser.run(line)
+        return self.visit(tree)
 
-    def clear(self):
-        self.tokens.clear()
-        self.position = 0
+    def visit_BinaryNode(self, node):
+        if node.op.type == lexems.PLUS:
+            return self.visit(node.left) + self.visit(node.right)
+        elif node.op.type == lexems.MINUS:
+            return self.visit(node.left) - self.visit(node.right)
+        elif node.op.type == lexems.MULTIPLY:
+            return self.visit(node.left) * self.visit(node.right)
+        elif node.op.type == lexems.DIVIDE:
+            return self.visit(node.left) / self.visit(node.right)
+        elif node.op.type == lexems.PERCENT:
+            return self.visit(node.left) % self.visit(node.right)
 
-    def current(self):
-        return self.get_token(position=self.position)
+    def visit_LiteralNode(self, node):
+        return node.val.value
 
-    def lookup(self):
-        return self.get_token(position=self.position + 1)
-
-    def next(self):
-        val = self.current()
-        self.position += 1
-        return val
-
-    def get_token(self, position):
-        if position >= len(self.tokens):
-            return Token(EOF, '')
-        return self.tokens[position]
-
-    def expr(self):
-        first = self.next()
-        second = self.next()
-        third = self.next()
-        if first.type == DIGIT and second.type == MINUS and third.type == DIGIT:
-            return first.value - third.value
-
-        if first.type == DIGIT and second.type == PLUS and third.type == DIGIT:
-            return first.value + third.value
-
-        if first.type == DIGIT:
-            return first.value
-
-        return ""

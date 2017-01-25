@@ -18,3 +18,9 @@ class Test_Parser(unittest.TestCase):
         tree = parser.run("1 + 7 * 5")
         self.assertEqual(tree.op, Token(lexems.PLUS, lexems.PLUS))
         self.assertEqual(tree.left.val, Token(lexems.DIGIT, 1.0))
+
+    def test_brackets(self):
+        parser = Parser()
+        tree = parser.run("(1 + 7) * 5")
+        self.assertEqual(tree.op, Token(lexems.MULTIPLY, lexems.MULTIPLY))
+        self.assertEqual(tree.right.val, Token(lexems.DIGIT, 5.0))
