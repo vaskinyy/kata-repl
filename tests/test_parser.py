@@ -24,3 +24,17 @@ class Test_Parser(unittest.TestCase):
         tree = parser.run("(1 + 7) * 5")
         self.assertEqual(tree.op, Token(lexems.MULTIPLY, lexems.MULTIPLY))
         self.assertEqual(tree.right.val, Token(lexems.DIGIT, 5.0))
+
+    def test_assignment(self):
+        parser = Parser()
+        tree = parser.run("x = 3")
+        self.assertEqual(tree.op, Token(lexems.ASSIGNMENT, lexems.ASSIGNMENT))
+        self.assertEqual(tree.right.val, Token(lexems.DIGIT, 3.0))
+        self.assertEqual(tree.left.val, Token(lexems.LETTER, 'x'))
+
+    def test_assignment_complex(self):
+        parser = Parser()
+        tree = parser.run("x = y = 3")
+        self.assertEqual(tree.op, Token(lexems.ASSIGNMENT, lexems.ASSIGNMENT))
+        self.assertEqual(tree.right.op, Token(lexems.ASSIGNMENT, lexems.ASSIGNMENT))
+        self.assertEqual(tree.left.val, Token(lexems.LETTER, 'x'))

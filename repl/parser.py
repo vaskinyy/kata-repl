@@ -1,6 +1,6 @@
 from repl import lexems
 from repl.lexer import Lexer, Token
-from repl.op import LiteralNode, BinaryNode
+from repl.op import LiteralNode, BinaryNode, VariableDefinitionNode
 
 
 class Parser(object):
@@ -43,14 +43,20 @@ class Parser(object):
     # digit::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
 
     def factor(self):
-        token = self.current()
-        if token.type == lexems.OPEN_BRACKET:
-            self.next()
+        token = self.next()
+
+        node = LiteralNode(token)
+        if token.type == lexems.LETTER and self.current().type == lexems.ASSIGNMENT:
+            node = VariableDefinitionNode(token)
+            op_token = self.next()
+            right = self.expr()
+            node = BinaryNode(node, op_token, right)
+        elif token.type == lexems.OPEN_BRACKET:
             res = self.expr()
             self.next()
             return res
-        self.next()
-        return LiteralNode(token)
+
+        return node
 
     def term(self):
         node = self.factor()

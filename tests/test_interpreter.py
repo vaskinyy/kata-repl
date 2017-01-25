@@ -38,3 +38,26 @@ class Test_Interpreter(unittest.TestCase):
         interpreter = Interpreter()
         res = interpreter.run("1+3%2")
         self.assertEqual(res, 2.0)
+
+    def test_assignment(self):
+        interpreter = Interpreter()
+        res = interpreter.run("x = 4")
+        self.assertEqual(res, 4.0)
+        res1 = interpreter.run("x")
+        self.assertEqual(res1, 4.0)
+
+    def test_assignment_complex(self):
+        interpreter = Interpreter()
+        res = interpreter.run("x = y = 4")
+        self.assertEqual(res, 4.0)
+        res1 = interpreter.run("x")
+        self.assertEqual(res1, 4.0)
+        res2 = interpreter.run("y")
+        self.assertEqual(res2, 4.0)
+
+    def test_assignemnt_plus(self):
+        interpreter = Interpreter()
+        res = interpreter.run("x = 5+4")
+        self.assertEqual(res, 9.0)
+        res1 = interpreter.run("x * 10")
+        self.assertEqual(res1, 90.0)
