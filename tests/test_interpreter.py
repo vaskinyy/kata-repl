@@ -89,3 +89,8 @@ class Test_Interpreter(unittest.TestCase):
         for d in data:
             res = interpreter.input(d[0])
             self.assertEqual(res, d[1])
+
+    def test_function_definitions(self):
+        interpreter = Interpreter()
+        res = interpreter.input("fn add x y => x + z")
+        self.assertEqual(res, "")

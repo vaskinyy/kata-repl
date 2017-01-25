@@ -64,4 +64,3 @@ class Test_Parser(unittest.TestCase):
         self.assertEqual(Token(lexems.LETTER, "echo"), tree.name)
         self.assertEqual([Token(lexems.LETTER, "x")],tree.arguments)
         self.assertEqual(Token(lexems.LETTER, "x"), tree.definition.val)
-

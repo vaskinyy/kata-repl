@@ -7,6 +7,7 @@ class Interpreter(NodeVisitor):
     def __init__(self):
         self.parser = Parser()
         self.variables = {}
+        self.functions = {}
 
     def input(self, line):
         self.parser.clear()
@@ -43,3 +44,7 @@ class Interpreter(NodeVisitor):
 
     def visit_VariableDefinitionNode(self, node):
         return node.val.value
+
+    def visit_FunctionDefinitionNode(self, node):
+        self.functions[node.name.value] = node
+        return ""
