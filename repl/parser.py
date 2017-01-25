@@ -1,6 +1,6 @@
 from repl.lexems import *
 from repl.lexer import Lexer, Token
-from repl.op import LiteralNode, BinaryNode, VariableDefinitionNode
+from repl.op import LiteralNode, BinaryNode, VariableDefinitionNode, FunctionDefinitionNode
 
 
 class Parser(object):
@@ -37,23 +37,39 @@ class Parser(object):
             return Token(EOF, "")
         return self.tokens[position]
 
-    def factor(self):
+    def function_def(self):
         token = self.next()
-
         node = LiteralNode(token)
-        if token.type == MINUS and self.current().type == DIGIT:
-            token = self.next()
-            token.value = -token.value
-            node = LiteralNode(token)
-        elif token.type == LETTER and self.current().type == ASSIGNMENT:
-            node = VariableDefinitionNode(token)
-            op_token = self.next()
-            right = self.expr()
-            node = BinaryNode(node, op_token, right)
-        elif token.type == OPEN_BRACKET:
-            res = self.expr()
+        if token.type == FN_KEYWORD:
+            arguments = []
+            name = self.next()
+            while self.current().type not in [FN_OPERATOR, EOF]:
+                arguments.append(self.next())
             self.next()
-            return res
+            body = self.expr()
+            node = FunctionDefinitionNode(name,arguments, body)
+        return node
+
+    def factor(self):
+        node = self.function_def()
+        if isinstance(node, LiteralNode):
+            if node.val.type == MINUS and self.current().type == DIGIT:
+                token = self.next()
+                token.value = -token.value
+                node = LiteralNode(token)
+            elif node.val.type == LETTER and self.current().type == ASSIGNMENT:
+                node = VariableDefinitionNode(node.val)
+                op_token = self.next()
+                right = self.expr()
+                node = BinaryNode(node, op_token, right)
+            elif node.val.type == OPEN_BRACKET:
+                res = self.expr()
+                self.next()
+                return res
+            # elif token.type == LETTER and self.current().type == ASSIGNMENT token.type == OPEN_BRACKET:
+            #     res = self.expr()
+            #     self.next()
+            #     return res
 
         return node
 
