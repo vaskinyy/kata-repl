@@ -61,3 +61,21 @@ class Test_Interpreter(unittest.TestCase):
         self.assertEqual(res, 9.0)
         res1 = interpreter.run("x * 10")
         self.assertEqual(res1, 90.0)
+
+    def test_arithmetics(self):
+        data = [
+            ['1+1', 2],
+            ['1 - 1', 0],
+            ['1* 1', 1],
+            ['1 /1', 1],
+            ['-123', -123],
+            ['123', 123],
+            ['2 /2+3 * 4.75- -6', 21.25],
+            ['12* 123', 1476],
+            ['2 / (2 + 3) * 4.33 - -6', 7.732],
+        ]
+        interpreter = Interpreter()
+
+        for d in data:
+            res = interpreter.run(d[0])
+            self.assertEqual(res, d[1])

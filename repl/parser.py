@@ -34,19 +34,15 @@ class Parser(object):
             return Token(lexems.EOF, '')
         return self.tokens[position]
 
-    # expression::= factor | expression operator expression
-    # factor::= number | identifier | assignment | '('expression')' | function - call
-    #
-    # operator::= '+' | '-' | '*' | '/' | '%'
-    #
-    # letter::= 'a' | 'b' | ... | 'y' | 'z' | 'A' | 'B' | ... | 'Y' | 'Z'
-    # digit::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
-
     def factor(self):
         token = self.next()
 
         node = LiteralNode(token)
-        if token.type == lexems.LETTER and self.current().type == lexems.ASSIGNMENT:
+        if token.type == lexems.MINUS and self.current().type == lexems.DIGIT:
+            token = self.next()
+            token.value = -token.value
+            node = LiteralNode(token)
+        elif token.type == lexems.LETTER and self.current().type == lexems.ASSIGNMENT:
             node = VariableDefinitionNode(token)
             op_token = self.next()
             right = self.expr()
