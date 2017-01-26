@@ -64,3 +64,37 @@ class Test_Parser(unittest.TestCase):
         self.assertEqual(Token(lexems.LETTER, "echo"), tree.name)
         self.assertEqual([Token(lexems.LETTER, "x")],tree.arguments)
         self.assertEqual(Token(lexems.LETTER, "x"), tree.definition.val)
+
+    def test_fn_def_call(self):
+        parser = Parser()
+        tree = parser.run("fn avg x y => (x + y) / 2")
+        self.assertEqual(Token(lexems.LETTER, "avg"), tree.name)
+        self.assertEqual([Token(lexems.LETTER, "x"), Token(lexems.LETTER, "y")], tree.arguments)
+        self.assertEqual(Token(lexems.DIVIDE, lexems.DIVIDE), tree.definition.op)
+
+        tree = parser.run("avg 1 2")
+        self.assertEqual(Token(lexems.LETTER, "avg"), tree.name)
+        self.assertEqual(Token(lexems.DIGIT, 1.0), tree.arguments[0].val)
+        self.assertEqual(Token(lexems.DIGIT, 2.0), tree.arguments[1].val)
+
+    def test_fn_def_add_call(self):
+        parser = Parser()
+        tree = parser.run("fn add x y => x + z")
+        self.assertEqual(Token(lexems.LETTER, "add"), tree.name)
+        self.assertEqual([Token(lexems.LETTER, "x"), Token(lexems.LETTER, "y")], tree.arguments)
+        self.assertEqual(Token(lexems.PLUS, lexems.PLUS), tree.definition.op)
+
+        tree = parser.run("add x+1 y")
+        self.assertEqual(Token(lexems.LETTER, "add"), tree.name)
+        self.assertEqual(Token(lexems.PLUS, lexems.PLUS), tree.arguments[0].op)
+        self.assertEqual(Token(lexems.LETTER, "y"), tree.arguments[1].val)
+
+    def test_fn_def_echo_call_no_def(self):
+        parser = Parser()
+        tree = parser.run("fn echo x => x")
+        self.assertEqual(Token(lexems.LETTER, "echo"), tree.name)
+        self.assertEqual([Token(lexems.LETTER, "x")],tree.arguments)
+        self.assertEqual(Token(lexems.LETTER, "x"), tree.definition.val)
+
+        with self.assertRaises(Exception) as context:
+            tree = parser.run("echo1 11")

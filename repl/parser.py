@@ -1,6 +1,7 @@
 from repl.lexems import *
 from repl.lexer import Lexer, Token
-from repl.op import LiteralNode, BinaryNode, VariableDefinitionNode, FunctionDefinitionNode
+from repl.op import LiteralNode, BinaryNode, VariableDefinitionNode, FunctionDefinitionNode, \
+    FunctionCallNode
 
 
 class Parser(object):
@@ -8,13 +9,14 @@ class Parser(object):
         self.lexer = Lexer()
         self.tokens = []
         self.position = 0
+        self.function_arg_num = {}
 
     def run(self, line):
         self.clear()
         self.tokens = self.lexer.parse(line)
         res = self.expr()
         if self.next() != Token(EOF, ""):
-            raise(Exception("Error: Invalid input"))
+            raise (Exception("Error: Invalid input"))
         return res
 
     def clear(self):
@@ -47,7 +49,8 @@ class Parser(object):
                 arguments.append(self.next())
             self.next()
             body = self.expr()
-            node = FunctionDefinitionNode(name,arguments, body)
+            node = FunctionDefinitionNode(name, arguments, body)
+            self.function_arg_num[name.value] = len(arguments)
         return node
 
     def factor(self):
@@ -66,10 +69,18 @@ class Parser(object):
                 res = self.expr()
                 self.next()
                 return res
-            # elif token.type == LETTER and self.current().type == ASSIGNMENT token.type == OPEN_BRACKET:
-            #     res = self.expr()
-            #     self.next()
-            #     return res
+            elif node.val.type == LETTER and self.current().type in [LETTER, DIGIT]:
+                # function call
+                func_name = node.val.value
+                if func_name not in self.function_arg_num:
+                    return node
+                    #raise Exception("Undefined function call {}", func_name)
+                argnum = self.function_arg_num[func_name]
+                args = []
+                for i in range(0, argnum):
+                    args.append(self.expr())
+                res = FunctionCallNode(node.val, args)
+                return res
 
         return node
 

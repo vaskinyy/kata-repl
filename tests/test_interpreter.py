@@ -92,5 +92,105 @@ class Test_Interpreter(unittest.TestCase):
 
     def test_function_definitions(self):
         interpreter = Interpreter()
-        res = interpreter.input("fn add x y => x + z")
+        with self.assertRaises(Exception) as context:
+            res = interpreter.input("fn add x y => x + z")
+
+    def test_function_add_call(self):
+        interpreter = Interpreter()
+        res = interpreter.input("fn add x y => x + y")
         self.assertEqual(res, "")
+
+        res1 = interpreter.input("add 1 2")
+        self.assertEqual(3.0, res1)
+
+    def test_function_echo_call(self):
+        interpreter = Interpreter()
+        res = interpreter.input("fn echo a => a")
+        self.assertEqual(res, "")
+
+        res1 = interpreter.input("echo 2")
+        self.assertEqual(2.0, res1)
+
+    def test_task_1(self):
+        interpreter = Interpreter()
+        res = interpreter.input("x = 7")
+        self.assertEqual(7.0, res)
+
+        res1 = interpreter.input("x")
+        self.assertEqual(7.0, res1)
+
+    def test_task_2(self):
+        interpreter = Interpreter()
+        res = interpreter.input("x = 7")
+        self.assertEqual(7.0, res)
+
+        res1 = interpreter.input("x + 6")
+        self.assertEqual(13.0, res1)
+
+    def test_task_3(self):
+        interpreter = Interpreter()
+        with self.assertRaises(Exception) as context:
+            res = interpreter.input("y + 3")
+
+    def test_task_4(self):
+        interpreter = Interpreter()
+        res = interpreter.input("x = 13 + (y = 3)")
+        self.assertEqual(16.0, res)
+
+        res1 = interpreter.input("x")
+        self.assertEqual(16.0, res1)
+
+        res2 = interpreter.input("y")
+        self.assertEqual(3.0, res2)
+
+    def test_task_5(self):
+        interpreter = Interpreter()
+        with self.assertRaises(Exception) as context:
+            res = interpreter.input("fn avg => (x + y) / 2")
+
+    def test_task_6(self):
+        interpreter = Interpreter()
+        res = interpreter.input("fn avg x y => (x + y) / 2")
+        self.assertEqual("", res)
+
+        res1 = interpreter.input("a = 2")
+        self.assertEqual(2.0, res1)
+
+        res2 = interpreter.input("b = 4")
+        self.assertEqual(4.0, res2)
+
+        res3 = interpreter.input("avg a b")
+        self.assertEqual(3.0, res3)
+
+    def test_task_7(self):
+        interpreter = Interpreter()
+        with self.assertRaises(Exception) as context:
+            res = interpreter.input("fn add x y => x + z")
+
+    def test_task_8(self):
+        interpreter = Interpreter()
+        res = interpreter.input("fn echo x => x")
+        self.assertEqual("", res)
+
+        res1 = interpreter.input("fn add x y => x + y")
+        self.assertEqual("", res1)
+
+        res2 = interpreter.input("add echo 4 echo 3")
+        self.assertEqual(7.0, res2)
+
+    def test_task_9(self):
+        interpreter = Interpreter()
+        res = interpreter.input("fn inc x => x + 1")
+        self.assertEqual("", res)
+
+        res1 = interpreter.input("a = 0")
+        self.assertEqual(0.0, res1)
+
+        res2 = interpreter.input("a = inc a")
+        self.assertEqual(1.0, res2)
+
+        res3 = interpreter.input("fn inc x => x + 2")
+        self.assertEqual("", res3)
+
+        res4 = interpreter.input("a = inc a")
+        self.assertEqual(3.0, res4)
