@@ -70,6 +70,9 @@ class Interpreter(NodeVisitor):
         for (i, argnode) in enumerate(node.arguments):
             local_varvalues[argnode.value] = None
 
+        if len(local_varvalues) != len(node.arguments):
+            raise Exception("Variable name duplication")
+
         # check variables
         self.visit(node.definition, local_varvalues, True)
         return ""

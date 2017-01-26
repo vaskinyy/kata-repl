@@ -98,3 +98,8 @@ class Test_Parser(unittest.TestCase):
 
         with self.assertRaises(Exception) as context:
             tree = parser.run("echo1 11")
+
+    def test_fn_def_echo_call_no_args(self):
+        parser = Parser()
+        tree = parser.run("fn echo => 2")
+        self.assertEqual(Token(lexems.LETTER, "echo"), tree.name)

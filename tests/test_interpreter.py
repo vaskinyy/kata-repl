@@ -194,3 +194,36 @@ class Test_Interpreter(unittest.TestCase):
 
         res4 = interpreter.input("a = inc a")
         self.assertEqual(3.0, res4)
+
+    def test_task_10(self):
+        interpreter = Interpreter()
+        with self.assertRaises(Exception) as context:
+            res = interpreter.input("fn add x x => x + x")
+
+    def test_task_11(self):
+        interpreter = Interpreter()
+        with self.assertRaises(Exception) as context:
+            res = interpreter.input("(fn echo x => x)")
+
+    def test_task_12(self):
+        interpreter = Interpreter()
+        res = interpreter.input("fn avg one two => (one + two) / 2")
+        self.assertEqual("", res)
+
+        res1 = interpreter.input("one = 2")
+        self.assertEqual(2.0, res1)
+
+        res2 = interpreter.input("b = 4")
+        self.assertEqual(4.0, res2)
+
+        res3 = interpreter.input("avg one b")
+        self.assertEqual(3.0, res3)
+
+    def test_task_13(self):
+        interpreter = Interpreter()
+        res = interpreter.input("fn one => 2")
+        self.assertEqual("", res)
+
+        res1 = interpreter.input("one")
+        self.assertEqual(2.0, res1)
+

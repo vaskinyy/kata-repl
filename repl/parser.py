@@ -43,6 +43,8 @@ class Parser(object):
         token = self.next()
         node = LiteralNode(token)
         if token.type == FN_KEYWORD:
+            if self.position != 1:
+                raise Exception("Functions definition within expression")
             arguments = []
             name = self.next()
             while self.current().type not in [FN_OPERATOR, EOF]:
@@ -69,12 +71,11 @@ class Parser(object):
                 res = self.expr()
                 self.next()
                 return res
-            elif node.val.type == LETTER and self.current().type in [LETTER, DIGIT]:
+            elif node.val.type == LETTER and node.val.value in self.function_arg_num:
                 # function call
                 func_name = node.val.value
-                if func_name not in self.function_arg_num:
-                    return node
-                    #raise Exception("Undefined function call {}", func_name)
+                # if func_name not in self.function_arg_num:
+                #     return node
                 argnum = self.function_arg_num[func_name]
                 args = []
                 for i in range(0, argnum):
