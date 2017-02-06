@@ -227,3 +227,10 @@ class Test_Interpreter(unittest.TestCase):
         res1 = interpreter.input("one")
         self.assertEqual(2.0, res1)
 
+    def test_task_43(self):
+        interpreter = Interpreter()
+
+        res1 = interpreter.input("2 / 2 + 3 * 4 - 6")
+        self.assertEqual(7.0, res1)
+
+
