@@ -20,7 +20,7 @@ class Parser(object):
         return res
 
     def clear(self):
-        self.tokens.clear()
+        self.tokens[:] = []
         self.position = 0
 
     def current(self):
